@@ -6,7 +6,7 @@ function User(user){
 }
 
 module.exports = User;
-
+// zhushi
 User.prototype.save = function(callback) {
     var user = {
         name: this.name,
