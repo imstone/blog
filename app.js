@@ -6,8 +6,13 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
 var routes = require('./routes/index');
-var users = require('./routes/users');
+var settings = require('./setting')
 
+var session = require('express-session');
+var MongoStore = require('connect-mongo')(session);
+var mongodb = require('mongodb');
+var server = new mongodb.Server('localhost', 27017, {auto_reconnect: true})
+var db = new mongodb.Db('blog', server, {safe: true})
 var app = express();
 
 // view engine setup
@@ -21,6 +26,44 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+//console.log(db)
+db.open(function(err, db){
+    if(!err){
+        console.log('connect db');
+        db.collection('mycoll',{safe:true}, function(err, collection){
+            var tmp1 = {id:'1',title:'hello',number:1};
+                collection.insert(tmp1,{safe:true},function(err, result){
+                    console.log(result);
+                }); 
+        })
+        //     if(err){
+        //         console.log(err);
+        //     }
+        // });
+    }
+    console.log(db)
+})
+// new MongoStore({
+//         db: settings.db,
+//         host: settings.host,
+//         port: settings.port
+//     })
+
+// app.use(session({
+//     resave:false,//添加这行  
+//     saveUninitialized: true,//添加这行
+//     secret: settings.cookieSecret,
+//     key: settings.db,
+//     cookie: {
+//         maxAge: 1000*60*60*24*30
+//     },
+//     store: new MongoStore({
+//         db: settings.db,
+//         host: settings.host,
+//         port: settings.port
+//     })
+// }))
+
 
 routes(app);
 // app.use('/', routes);
