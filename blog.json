@@ -1,0 +1,10 @@
+{
+  "apps": [
+    {
+      "name": "blog",
+      "script": "./bin/www",
+      "watch": "../blog",
+      "log_date_format": "YYYY-MM-DD HH:mm Z"
+    }
+  ]
+}
